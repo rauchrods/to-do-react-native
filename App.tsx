@@ -1,118 +1,61 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import {Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import GoalItems from './components/GoalItems';
+import GoalInput from './components/GoalInput';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+function App(): React.JSX.Element {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [goals, setGoals] = useState<Array<string>>([]);
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  function modalVisiblityHandler(): void {
+    setIsModalVisible(currState => !currState);
+  }
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  function deleteGoalHandler(id: number): void {
+    const updatedGoals = goals.filter((goal, index) => index !== id);
+    setGoals(updatedGoals);
+  }
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.appContainer}>
+      <TouchableOpacity
+        onPress={modalVisiblityHandler}
+        style={styles.mainButton}>
+        <Text style={styles.mainButtonText}>Add a new Goal</Text>
+      </TouchableOpacity>
+      <GoalInput
+        setGoals={setGoals}
+        isModalVisible={isModalVisible}
+        modalVisiblityHandler={modalVisiblityHandler}
+      />
+      <GoalItems goals={goals} deleteGoalHandler={deleteGoalHandler} />
     </View>
   );
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+export default App;
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  appContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    flex: 1,
+    backgroundColor: Colors.dark,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+
+  mainButton: {
+    backgroundColor: '#318CE7',
+    padding: 6,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 16,
+    marginHorizontal: 32,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+
+  mainButtonText: {
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
-
-export default App;
