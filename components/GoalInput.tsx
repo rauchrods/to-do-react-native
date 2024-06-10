@@ -15,6 +15,8 @@ function GoalInput({
 }: GoalInputInterface): React.JSX.Element {
   const [goal, setGoal] = useState<string>('');
 
+
+  
   const setGoalHandler = (text: string): void => {
     setGoal(text);
   };
